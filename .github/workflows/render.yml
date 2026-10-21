@@ -1,0 +1,109 @@
+name: Render documentary
+
+on:
+  workflow_dispatch:
+    inputs:
+      format:
+        description: "Output format"
+        type: choice
+        default: "1080p"
+        options: ["1080p", "4k", "shorts", "all"]
+      fps:
+        description: "Frames per second (24 or 30; 24 renders ~20% faster)"
+        type: choice
+        default: "30"
+        options: ["30", "24"]
+      tts:
+        description: "Narration engine (edge = natural voice, espeak = offline robotic, none = music only)"
+        type: choice
+        default: "edge"
+        options: ["edge", "espeak", "none"]
+      voice:
+        description: "edge-tts voice (e.g. en-US-GuyNeural, en-GB-RyanNeural, en-US-AriaNeural)"
+        type: string
+        default: "en-US-GuyNeural"
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+      formats: ${{ steps.m.outputs.formats }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg espeak-ng
+      - run: pip install edge-tts
+      - run: npm ci
+      - name: Plan (narration + timings)
+        env:
+          TTS_VOICE: ${{ inputs.voice }}
+        run: node scripts/plan.mjs --format ${{ inputs.format }} --fps ${{ inputs.fps }} --tts ${{ inputs.tts }} --matrix
+      - id: m
+        run: |
+          echo "matrix=$(cat build/matrix.json)" >> "$GITHUB_OUTPUT"
+          if [ "${{ inputs.format }}" = "all" ]; then echo 'formats=["1080p","4k","shorts"]' >> "$GITHUB_OUTPUT"; else echo 'formats=["${{ inputs.format }}"]' >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan
+          # build/matrix.json is included on purpose: it pins the artifact root to build/ even for a single format
+          path: |
+            build/matrix.json
+            build/*/plan.json
+            build/*/captions.srt
+            build/*/audio
+          retention-days: 3
+
+  render:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: plan, path: build }
+      - name: Verify plan
+        run: ls -R build | head -30 && test -f build/${{ matrix.format }}/plan.json
+      - name: Render ${{ matrix.format }} / ${{ matrix.scene }}
+        run: node scripts/render-scene.mjs --format ${{ matrix.format }} --scene ${{ matrix.scene }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clip-${{ matrix.format }}-${{ matrix.scene }}
+          path: build/${{ matrix.format }}/clips/${{ matrix.scene }}.mp4
+          retention-days: 3
+
+  assemble:
+    needs: [plan, render]
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        format: ${{ fromJSON(needs.plan.outputs.formats) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: plan, path: build }
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: clip-${{ matrix.format }}-*
+          path: build/${{ matrix.format }}/clips
+          merge-multiple: true
+      - run: node scripts/assemble.mjs --format ${{ matrix.format }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mars-documentary-${{ matrix.format }}
+          path: build/${{ matrix.format }}/out/*
+          retention-days: 14
