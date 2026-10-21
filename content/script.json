@@ -1,0 +1,135 @@
+{
+  "title": "Built for Dust and Radiation",
+  "subtitle": "How NASA and SpaceX robots plan to survive Mars",
+  "scenes": [
+    {
+      "id": "cold-open",
+      "chapter": "Prologue",
+      "title": "A planet that can swallow the Sun",
+      "minDuration": 10,
+      "short": true,
+      "shortMinDuration": 6,
+      "narration": "Mars is a world where the sky itself can turn against you. Every few years, dust storms grow until they wrap the entire planet, and for the robots on the surface, the Sun simply goes out.",
+      "shortNarration": "On Mars, a dust storm can swallow the Sun. And every robot there has to survive it.",
+      "callouts": [
+        { "type": "stat", "u0": 0.55, "u1": 0.95, "value": "Planet-wide", "label": "The 2018 storm began as a regional storm on May 30 and went global within weeks", "source": "NASA Science" }
+      ]
+    },
+    {
+      "id": "dust-storm",
+      "chapter": "Chapter 1",
+      "title": "The storm that silenced Opportunity",
+      "minDuration": 18,
+      "short": true,
+      "shortMinDuration": 8,
+      "narration": "In June 2018, the most intense dust storm in Mars's recorded history reached the solar-powered rover Opportunity. Daylight turned to night. Its power fell from more than six hundred watt-hours a day to about twenty. The rover powered down, went silent, and never woke again. Its mission was declared over in February 2019, fourteen years after a ninety-day warranty.",
+      "shortNarration": "In 2018, a global storm blotted out the Sun over the solar-powered rover Opportunity. Its power collapsed, and it never woke up.",
+      "callouts": [
+        { "type": "stat", "u0": 0.30, "u1": 0.62, "value": "600 → 20 Wh", "label": "Opportunity's daily solar energy, before vs. during the storm", "source": "NASA / JPL reporting, 2018" },
+        { "type": "stat", "u0": 0.70, "u1": 0.97, "value": "14 years", "label": "Mission life against a 90-day design life", "source": "NASA JPL" }
+      ]
+    },
+    {
+      "id": "sticky-dust",
+      "chapter": "Chapter 2",
+      "title": "Dust that clings",
+      "minDuration": 17,
+      "short": false,
+      "narration": "Martian dust is not like dust on Earth. It is electrostatically charged, so it clings to solar panels and optics, and the grains are finer than forty microns. Wiping it risks scratching the glass. Even the little helicopter Ingenuity kicked up roughly a thousandth of its own mass in dust on every flight. Engineers are now testing electrodynamic dust shields that use electric fields to lift grains off a surface.",
+      "callouts": [
+        { "type": "stat", "u0": 0.35, "u1": 0.68, "value": "< 40 µm", "label": "Grain size inferred from Sojourner's wheel-abrasion experiment", "source": "NASA Glenn / Mars Pathfinder" }
+      ]
+    },
+    {
+      "id": "nuclear-heart",
+      "chapter": "Chapter 3",
+      "title": "A nuclear heart",
+      "minDuration": 18,
+      "short": true,
+      "shortMinDuration": 8,
+      "narration": "NASA's answer was to stop depending on sunlight. Curiosity and Perseverance carry a radioisotope generator that turns the heat of decaying plutonium into about one hundred and ten watts of steady electricity. It does not care about night, winter, or dust. Its waste heat also keeps the rover warm, and it is designed to last up to fourteen years.",
+      "shortNarration": "NASA's fix: stop depending on the Sun. Perseverance runs on a plutonium heat source, about a hundred and ten watts, in any weather.",
+      "callouts": [
+        { "type": "stat", "u0": 0.36, "u1": 0.66, "value": "~110 W", "label": "Continuous electrical power from the MMRTG, plus waste heat to keep the rover warm", "source": "NASA JPL, Mars 2020" },
+        { "type": "stat", "u0": 0.70, "u1": 0.97, "value": "Up to 14 years", "label": "Design lifetime of the power system", "source": "NASA JPL" }
+      ]
+    },
+    {
+      "id": "wheels",
+      "chapter": "Chapter 4",
+      "title": "Wheels against the regolith",
+      "minDuration": 14,
+      "short": false,
+      "narration": "Dust is also an abrasive. Curiosity's aluminum wheels were scarred by sharp rocks, and researchers suspect that corrosive perchlorate salts in the soil can make the damage worse. Perseverance rolls on redesigned wheels with a thicker skin and a new tread, and it drives itself, because even a message to Earth can take twenty minutes.",
+      "callouts": [
+        { "type": "stat", "u0": 0.2, "u1": 0.55, "value": "Perchlorates", "label": "Corrosive salts found across Mars's regolith", "source": "Curiosity SAM instrument" }
+      ]
+    },
+    {
+      "id": "radiation",
+      "chapter": "Chapter 5",
+      "title": "The invisible storm",
+      "minDuration": 22,
+      "short": true,
+      "shortMinDuration": 9,
+      "narration": "The other threat is invisible. Mars has lost its global magnetic field, and its thin air offers little shielding. Curiosity's radiation detector measured about point six four millisieverts per day on the surface, and nearly three times that, one point eight four, on the way there. A full round trip with five hundred days on the surface would add up to roughly one sievert for a human crew.",
+      "shortNarration": "The invisible threat is radiation. Mars has no magnetic field, and Curiosity measured about point six four millisieverts of cosmic radiation every single day.",
+      "callouts": [
+        { "type": "bars", "u0": 0.30, "u1": 0.66, "title": "Radiation dose equivalent, mSv per day", "items": [ { "label": "Cruise to Mars", "value": 1.84 }, { "label": "Mars surface", "value": 0.64 } ], "source": "Hassler et al., Science, 2013 (Curiosity RAD)" },
+        { "type": "stat", "u0": 0.72, "u1": 0.97, "value": "≈ 1 Sv", "label": "Estimated total for a 180 + 500 + 180-day mission", "source": "NASA / SwRI" }
+      ]
+    },
+    {
+      "id": "rad-hard",
+      "chapter": "Chapter 6",
+      "title": "Brains that do not flinch",
+      "minDuration": 14,
+      "short": false,
+      "narration": "A single high-energy particle can flip a bit inside an ordinary chip. So rovers think with radiation-hardened electronics. The RAD750 processor inside both Curiosity and Perseverance descends from defense technology, and its memory and logic are built to detect and correct errors rather than crash.",
+      "callouts": [
+        { "type": "stat", "u0": 0.45, "u1": 0.9, "value": "RAD750", "label": "Radiation-hardened flight computer used on Curiosity and Perseverance", "source": "NASA / BAE Systems" }
+      ]
+    },
+    {
+      "id": "spacex",
+      "chapter": "Chapter 7",
+      "title": "SpaceX and the humanoid advance team",
+      "minDuration": 24,
+      "short": true,
+      "shortMinDuration": 10,
+      "narration": "SpaceX wants to send robots first. Its plan has been to land uncrewed Starships carrying Tesla's Optimus humanoids to prepare the ground for people. But the schedule has slipped. In February 2026 the company shifted its priority to the Moon, and the November to December 2026 window is effectively gone, with the next one around late 2028. SpaceX has not published how Optimus would be hardened against dust and radiation, so for now, that part of the story is still unwritten.",
+      "shortNarration": "SpaceX plans to send Optimus robots first. But its 2026 Mars window has slipped, and how they'd survive dust and radiation hasn't been published.",
+      "callouts": [
+        { "type": "stat", "u0": 0.55, "u1": 0.98, "value": "Next window: ~2028–29", "label": "Earth–Mars launch opportunities come about every 26 months", "source": "19FortyFive, Aug 2026; WSJ via Spacedaily" }
+      ]
+    },
+    {
+      "id": "lessons",
+      "chapter": "Chapter 8",
+      "title": "Design for the planet you are going to",
+      "minDuration": 15,
+      "short": false,
+      "narration": "Every robot on Mars is a lesson. Opportunity taught us that sunlight is a fragile ally. Ingenuity showed how dust lifts and clings. Curiosity and Perseverance proved that nuclear power and hardened electronics can outlast the storms. Whoever walks on Mars next, human or machine, will inherit all of it.",
+      "callouts": []
+    },
+    {
+      "id": "outro",
+      "chapter": "",
+      "title": "Built for Dust and Radiation",
+      "minDuration": 11,
+      "short": false,
+      "narration": "Mars does not forgive weak design. But it rewards the robots that are built to endure it.",
+      "callouts": [ { "type": "sources", "u0": 0.28, "u1": 1.0 } ]
+    }
+  ],
+  "sources": [
+    "NASA Science / NTRS: The 2018 Mars Global Dust Storm; MER Opportunity dust-storm recovery operations (NTRS 20210015954)",
+    "NASA JPL: Mars 2020 Perseverance power system (MMRTG)",
+    "Hassler et al., Science 2013: Mars' Surface Radiation Environment measured with Curiosity RAD (SwRI / DLR)",
+    "NASA Glenn: Mars Pathfinder Wheel Abrasion Experiment (NTRS 20050179380)",
+    "Martín-Torres et al., 2021: Brine-induced tribocorrosion and Mars rover wheels",
+    "NASA / Stevens Institute: dust dynamics of Martian helicopters (Ingenuity)",
+    "Aerospace America (AIAA): A Closer Look at SpaceX's Mars Plan",
+    "19FortyFive, Aug 2026: The Mars launch window opens in November 2026; WSJ, 6 Feb 2026 (via Spacedaily)"
+  ]
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Built for Dust and Radiation</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  @font-face { font-family: 'Inter'; font-weight: 400; src: url(/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 600; src: url(/node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Barlow Condensed'; font-weight: 600; src: url(/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Barlow Condensed'; font-weight: 700; src: url(/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2) format('woff2'); }
+  :root { --u: 1px; --accent: #f08a45; --ink: #f6efe8; --panel: rgba(14, 8, 6, 0.62); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--ink); }
+  #stage { position: absolute; inset: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 46%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
+  #grade { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; background: linear-gradient(180deg, rgba(255,150,80,0.10), rgba(20,30,80,0.12)); }
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
+  #ui { position: absolute; inset: 0; pointer-events: none; text-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 14) rgba(0,0,0,0.7); }
+
+  /* chapter card */
+  #chapter { position: absolute; left: calc(var(--u) * 96); top: calc(var(--u) * 84); opacity: 0; transform: translateY(calc(var(--u) * 14)); }
+  #chapter .k { font: 600 calc(var(--u) * 26) 'Barlow Condensed'; letter-spacing: calc(var(--u) * 7); text-transform: uppercase; color: var(--accent); }
+  #chapter .t { font: 700 calc(var(--u) * 78) / 1.0 'Barlow Condensed'; text-transform: uppercase; letter-spacing: calc(var(--u) * 1.5); margin-top: calc(var(--u) * 8); max-width: calc(var(--u) * 1150); }
+  #chapter .bar { width: calc(var(--u) * 84); height: calc(var(--u) * 4); background: var(--accent); margin-top: calc(var(--u) * 20); }
+  body.portrait #chapter { left: calc(var(--u) * 64); right: calc(var(--u) * 64); top: calc(var(--u) * 150); }
+  body.portrait #chapter .k { font-size: calc(var(--u) * 34); }
+  body.portrait #chapter .t { font-size: calc(var(--u) * 104); max-width: none; }
+
+  /* callouts */
+  .callout { position: absolute; opacity: 0; background: var(--panel); border-left: calc(var(--u) * 5) solid var(--accent); padding: calc(var(--u) * 22) calc(var(--u) * 30); backdrop-filter: blur(calc(var(--u) * 6)); border-radius: 0 calc(var(--u) * 6) calc(var(--u) * 6) 0; }
+  .callout .v { font: 700 calc(var(--u) * 84) / 0.95 'Barlow Condensed'; color: #ffd6b0; letter-spacing: calc(var(--u) * 1); }
+  .callout .l { font: 400 calc(var(--u) * 26) / 1.3 'Inter'; margin-top: calc(var(--u) * 8); max-width: calc(var(--u) * 560); }
+  .callout .s { font: 400 calc(var(--u) * 17) 'Inter'; margin-top: calc(var(--u) * 12); opacity: 0.62; letter-spacing: calc(var(--u) * 0.5); }
+  .stat { right: calc(var(--u) * 96); top: calc(var(--u) * 150); }
+  .bars { right: calc(var(--u) * 96); top: calc(var(--u) * 150); width: calc(var(--u) * 640); }
+  .bars .h { font: 600 calc(var(--u) * 22) 'Barlow Condensed'; letter-spacing: calc(var(--u) * 3); text-transform: uppercase; color: var(--accent); margin-bottom: calc(var(--u) * 18); }
+  .bars .row { margin-bottom: calc(var(--u) * 16); }
+  .bars .row .n { display: flex; justify-content: space-between; font: 400 calc(var(--u) * 24) 'Inter'; margin-bottom: calc(var(--u) * 6); }
+  .bars .row .n b { font: 700 calc(var(--u) * 34) 'Barlow Condensed'; color: #ffd6b0; }
+  .bars .track { height: calc(var(--u) * 16); background: rgba(255,255,255,0.12); border-radius: calc(var(--u) * 8); overflow: hidden; }
+  .bars .fill { height: 100%; width: 0; background: linear-gradient(90deg, #f08a45, #ffcf99); border-radius: calc(var(--u) * 8); }
+  .sources { left: calc(var(--u) * 96); right: calc(var(--u) * 96); top: calc(var(--u) * 150); background: rgba(10,6,4,0.72); }
+  .sources .h { font: 600 calc(var(--u) * 26) 'Barlow Condensed'; letter-spacing: calc(var(--u) * 5); text-transform: uppercase; color: var(--accent); margin-bottom: calc(var(--u) * 12); }
+  .sources li { font: 400 calc(var(--u) * 19) / 1.35 'Inter'; margin: calc(var(--u) * 6) 0; opacity: 0.86; }
+  .sources ul { margin: 0; padding-left: calc(var(--u) * 22); }
+  body.portrait .stat, body.portrait .bars { right: calc(var(--u) * 48); left: calc(var(--u) * 48); top: auto; bottom: calc(var(--u) * 560); width: auto; }
+  body.portrait .callout .v { font-size: calc(var(--u) * 108); }
+  body.portrait .callout .l { font-size: calc(var(--u) * 34); max-width: none; }
+  body.portrait .callout .s { font-size: calc(var(--u) * 22); }
+  body.portrait .bars .row .n { font-size: calc(var(--u) * 32); }
+  body.portrait .bars .row .n b { font-size: calc(var(--u) * 46); }
+  body.portrait .bars .h { font-size: calc(var(--u) * 30); }
+  body.portrait .bars .track { height: calc(var(--u) * 22); }
+
+  /* captions */
+  #caption { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 78); display: flex; justify-content: center; opacity: 0; }
+  #caption span { font: 600 calc(var(--u) * 40) / 1.25 'Inter'; background: rgba(8, 4, 3, 0.58); padding: calc(var(--u) * 8) calc(var(--u) * 24) calc(var(--u) * 12); border-radius: calc(var(--u) * 8); max-width: calc(var(--u) * 1500); text-align: center; }
+  body.portrait #caption { bottom: calc(var(--u) * 420); padding: 0 calc(var(--u) * 60); }
+  body.portrait #caption span { font-size: calc(var(--u) * 62); max-width: none; line-height: 1.18; }
+
+  #brand { position: absolute; right: calc(var(--u) * 54); bottom: calc(var(--u) * 36); font: 600 calc(var(--u) * 17) 'Barlow Condensed'; letter-spacing: calc(var(--u) * 5); opacity: 0.55; text-transform: uppercase; }
+  body.portrait #brand { display: none; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="vignette"></div><div id="grade"></div>
+<div id="ui">
+  <div id="chapter"><div class="k"></div><div class="t"></div><div class="bar"></div></div>
+  <div id="callouts"></div>
+  <div id="caption"><span></span></div>
+  <div id="brand">Built for Dust and Radiation</div>
+</div>
+<div id="fade"></div>
+<script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js" } }</script>
+<script type="module" src="/web/main.js"></script>
+</body>
+</html>

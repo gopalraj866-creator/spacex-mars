@@ -1,0 +1,28 @@
+{
+  "name": "mars-documentary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "How NASA and SpaceX robots survive Martian dust storms and radiation - a procedural three.js documentary rendered headlessly in GitHub Actions (4K, 1080p, Shorts).",
+  "scripts": {
+    "preview": "node scripts/preview.mjs",
+    "plan": "node scripts/plan.mjs",
+    "render:scene": "node scripts/render-scene.mjs",
+    "assemble": "node scripts/assemble.mjs",
+    "build:1080p": "node scripts/build-local.mjs --format 1080p",
+    "build:4k": "node scripts/build-local.mjs --format 4k",
+    "build:shorts": "node scripts/build-local.mjs --format shorts",
+    "build:all": "node scripts/build-local.mjs --format all",
+    "test:frames": "node scripts/test-frames.mjs"
+  },
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "@sparticuz/chromium": "131.0.1",
+    "puppeteer-core": "^23.11.1",
+    "three": "0.170.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
